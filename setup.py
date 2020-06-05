@@ -33,3 +33,4 @@ setup(
     package_data=PACKAGES_DATA,
     scripts=[],
 )
+# vim: et sw=4 ts=4
