@@ -271,7 +271,7 @@ def decodeSignedData(
     if signature != Ds_Signature:
         error("Bad signature")
 
-    for key in data :
+    for key in list(data):
         if key in _notification_fields_upper:
             camell = _notification_fields_upper[key]
             data[camell]=data[key]
