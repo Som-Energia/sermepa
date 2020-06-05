@@ -6,7 +6,13 @@ import unittest
 import base64
 import json
 import re
-from sermepa import orderSecret, signPayload, decodeSignedData, SignatureError, encodeSignedData
+from sermepa import (
+    orderSecret,
+    signPayload,
+    decodeSignedData,
+    encodeSignedData,
+    SignatureError,
+)
 
 try:
     import config
