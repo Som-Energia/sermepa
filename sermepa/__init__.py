@@ -70,12 +70,11 @@ params = dict([
     (name, dict(
         name = name,
         optionality = optionality,
-        type = type,
+        type = type_,
         length = length,
         ))
-    for optionality, type, length, name in _request_fields
+    for optionality, type_, length, name in _request_fields
     ])
-    
 
 DATA = [ p['name'] for p in params.values() ]
 MANDATORY_DATA = [ p['name'] for p in params.values() if p['optionality'] == 'M']
