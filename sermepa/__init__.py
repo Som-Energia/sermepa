@@ -365,3 +365,4 @@ class TestClient(Client):
         super(TestClient, self).__init__(business_code, priv_key,
               'https://sis-t.redsys.es:25443/sis/realizarPago')
 
+# vim: et sw=4 ts=4
