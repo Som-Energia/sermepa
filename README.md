@@ -1,6 +1,6 @@
 # Sermepa client
 
-A python client for sending payment orders to the Sermepa/RedSys payment service.
+A python client library for sending payment orders to the Sermepa/RedSys payment service.
 
 [![Build Status](https://travis-ci.org/Som-Energia/sermepa.svg?branch=master)](https://travis-ci.org/Som-Energia/sermepa)
 
