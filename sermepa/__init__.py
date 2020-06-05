@@ -183,6 +183,19 @@ _notificationErrors = [
     (9999, 'Operación que ha sido redirigida al emisor a autenticar'),
 ]
 
+def b(data):
+    if type(data) == type(b''):
+        return data
+    if type(data) == type(u''):
+        return data.encode('utf8')
+    return type(u'')(data).encode('utf8')
+
+def u(data):
+    if type(data) == type(u''):
+        return data
+    if type(data) == type(b''):
+        return data.decode('utf8')
+    return type(u'')(data)
 
 def orderSecret(key, order):
     """
@@ -192,15 +205,15 @@ def orderSecret(key, order):
     Returns the secret key in base64 format.
     """
 
-    decodedkey = base64.b64decode(key)
+    decodedkey = base64.b64decode(b(key))
     k = pyDes.triple_des(
         decodedkey,
         pyDes.CBC,
         b"\0\0\0\0\0\0\0\0",
         pad='\0',
         )
-    secret = k.encrypt(order)
-    return base64.b64encode(secret)
+    secret = k.encrypt(b(order))
+    return u(base64.b64encode(secret))
 
 def signPayload(secret, data, urlsafe=False):
     """
@@ -212,12 +225,12 @@ def signPayload(secret, data, urlsafe=False):
     """
 
     result = hmac.new(
-        base64.b64decode(secret),
-        data,
+        base64.b64decode(b(secret)),
+        b(data),
         digestmod = hashlib.sha256
         ).digest()
     encoder = base64.urlsafe_b64encode if urlsafe else base64.b64encode
-    return encoder(result)
+    return u(encoder(result))
 
 class SignatureError(Exception): pass
 
@@ -234,13 +247,8 @@ def decodeSignedData(
     if Ds_SignatureVersion != 'HMAC_SHA256_V1':
         error('Unsupported signature version')
 
-    def tobytes(data):
-        if hasattr(data, 'encode'):
-            return data.encode()
-        return data
-
     try:
-        json_data = base64.urlsafe_b64decode(tobytes(Ds_MerchantParameters))
+        json_data = base64.urlsafe_b64decode(b(Ds_MerchantParameters))
     except:
         error('Unable to decode base 64')
 
@@ -285,7 +293,7 @@ def encodeSignedData(merchantKey, **kwds):
         kwds[param] = kwds[param][:lenght]
 
     params_json = json.dumps(kwds, sort_keys=True)
-    b64params = base64.b64encode(params_json)
+    b64params = u(base64.b64encode(b(params_json)))
     secret = orderSecret(merchantKey, kwds['Ds_Merchant_Order'])
     signature = signPayload(secret, b64params)
 

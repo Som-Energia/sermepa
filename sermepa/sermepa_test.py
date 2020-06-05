@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 import unittest
 
@@ -12,6 +13,7 @@ from sermepa import (
     decodeSignedData,
     encodeSignedData,
     SignatureError,
+    u, b,
 )
 
 try:
@@ -45,25 +47,34 @@ class Generator_Test(unittest.TestCase):
         "X01FUkNIQU5UX01FUkNIQU5UVVJMIjoiIiwiRFNfTUVSQ0hBTlRfVVJMT0siOiIiL"
         "CJEU19NRVJDSEFOVF9VUkxLTyI6IiJ9"
         )
-    merchantOrder = b"1447961844"
-    merchantkey = b'Mk9m98IfEblmPfrpsawt7BmxObt98Jev'
-    secret= b'38t5Zm5RjlVHNycd8Nutcg=='
-    signature = b'Ejse86yr96Xbr1mf6UvQLoTPwwTyFiLXM+2uT09i9nY='
+    merchantOrder = "1447961844"
+    merchantkey = 'Mk9m98IfEblmPfrpsawt7BmxObt98Jev'
+    secret= '38t5Zm5RjlVHNycd8Nutcg=='
+    signature = 'Ejse86yr96Xbr1mf6UvQLoTPwwTyFiLXM+2uT09i9nY='
     signatureversion = 'HMAC_SHA256_V1'
 
 
     def test_encodePayload(self):
         self.assertEqual(
-            base64.b64encode(self.json),
+            u(base64.b64encode(b(self.json))),
             self.encodedPayload)
 
     def test_generateSecret(self):
         secret = orderSecret(self.merchantkey, self.merchantOrder)
+        self.assertEqual(self.secret, secret)
+
+    def test_generateSecret_bytes(self):
+        secret = orderSecret(b(self.merchantkey), b(self.merchantOrder))
 
         self.assertEqual(self.secret, secret)
 
     def test_signPayload(self):
         signature = signPayload(self.secret, self.encodedPayload)
+
+        self.assertMultiLineEqual(signature, self.signature)
+
+    def test_signPayload_bytes(self):
+        signature = signPayload(b(self.secret), b(self.encodedPayload))
 
         self.assertMultiLineEqual(signature, self.signature)
 
@@ -284,22 +295,22 @@ class NotificationReceiver_Test(unittest.TestCase):
 
     # back2back data taken from PHP example
 
-    encodeddata = b'eyJEc19PcmRlciI6ICI2NjYifQ=='
+    encodeddata = 'eyJEc19PcmRlciI6ICI2NjYifQ=='
     data = (
         '{'
             '"Ds_Order": "666"'
         '}'
         )
-    merchantkey = b'Mk9m98IfEblmPfrpsawt7BmxObt98Jev'
+    merchantkey = 'Mk9m98IfEblmPfrpsawt7BmxObt98Jev'
     secret = '1uGRHjGaVgg='
-    signature = b"BskiXgq875tls56oClRVg72-ppcLpOSW0JUY9riQEKs="
+    signature = "BskiXgq875tls56oClRVg72-ppcLpOSW0JUY9riQEKs="
     orderid = '666'
     signatureversion = 'HMAC_SHA256_V1'
 
     def test_payloadDecoding(self):
         # TODO: Should be urlsafe_b64decode, provide an input which differs
         decodedData = base64.b64decode(self.encodeddata)
-        self.assertEqual(decodedData, self.data)
+        self.assertEqual(decodedData, b(self.data))
 
     def test_obtainOrder(self):
         # TODO: It could be DS_ORDER as well
@@ -351,10 +362,11 @@ class NotificationReceiver_Test(unittest.TestCase):
 
     def test_decodeSignedData_badJson(self):
         json_data = "{bad json}"
+        base64_data = base64.urlsafe_b64encode(b(json_data))
         with self.assertRaises(SignatureError) as cm:
             decodeSignedData(
                 self.merchantkey,
-                Ds_MerchantParameters = base64.urlsafe_b64encode(json_data),
+                Ds_MerchantParameters = base64_data,
                 Ds_Signature = self.signature,
                 Ds_SignatureVersion = self.signatureversion,
                 )
@@ -363,10 +375,11 @@ class NotificationReceiver_Test(unittest.TestCase):
 
     def test_decodeSignedData_misingOrder(self):
         json_data = '{}'
+        base64_data = base64.urlsafe_b64encode(b(json_data))
         with self.assertRaises(SignatureError) as cm:
             decodeSignedData(
                 self.merchantkey,
-                Ds_MerchantParameters = base64.urlsafe_b64encode(json_data),
+                Ds_MerchantParameters = base64_data,
                 Ds_Signature = self.signature,
                 Ds_SignatureVersion = self.signatureversion,
                 )
@@ -375,10 +388,11 @@ class NotificationReceiver_Test(unittest.TestCase):
 
     def test_decodeSignedData_badSignature(self):
         json_data = '{"Ds_Order":"777"}'
+        base64_data = base64.urlsafe_b64encode(b(json_data))
         with self.assertRaises(SignatureError) as cm:
             decodeSignedData(
                 self.merchantkey,
-                Ds_MerchantParameters = base64.urlsafe_b64encode(json_data),
+                Ds_MerchantParameters = base64_data,
                 Ds_Signature = self.signature,
                 Ds_SignatureVersion = self.signatureversion,
                 )
@@ -387,7 +401,7 @@ class NotificationReceiver_Test(unittest.TestCase):
 
     def test_decodeSignedData_badParam(self):
         json_data = '{"Ds_Order":"666", "Bad":"value"}'
-        base64_data = base64.urlsafe_b64encode(json_data)
+        base64_data = base64.urlsafe_b64encode(b(json_data))
         signature = signPayload(self.secret, base64_data, urlsafe=True)
         with self.assertRaises(SignatureError) as cm:
             decodeSignedData(
@@ -401,7 +415,7 @@ class NotificationReceiver_Test(unittest.TestCase):
 
     def test_decodeSignedData_upperCaseOrder(self):
         json_data = '{"DS_ORDER":"666"}'
-        base64_data = base64.urlsafe_b64encode(json_data)
+        base64_data = base64.urlsafe_b64encode(b(json_data))
         signature = signPayload(self.secret, base64_data, urlsafe=True)
         data = decodeSignedData(
             self.merchantkey,
@@ -415,13 +429,13 @@ class NotificationReceiver_Test(unittest.TestCase):
 
     def test_decodeSignedData_unicode(self):
         json_data = '{"DS_ORDER":"666"}'
-        base64_data = base64.urlsafe_b64encode(json_data)
+        base64_data = base64.urlsafe_b64encode(b(json_data))
         signature = signPayload(self.secret, base64_data, urlsafe=True)
         data = decodeSignedData(
             self.merchantkey,
-            Ds_MerchantParameters = base64_data.decode('ascii'),
-            Ds_Signature = signature.decode('ascii'),
-            Ds_SignatureVersion = self.signatureversion.decode('ascii'),
+            Ds_MerchantParameters = base64_data,
+            Ds_Signature = signature,
+            Ds_SignatureVersion = self.signatureversion,
             )
         self.assertEqual(data, dict(
             Ds_Order = '666',
@@ -429,13 +443,13 @@ class NotificationReceiver_Test(unittest.TestCase):
 
     def test_decodeSignedData_CardBrandParameter(self):
         json_data = '{"DS_ORDER": "666", "Ds_Card_Brand":"1"}'
-        base64_data = base64.urlsafe_b64encode(json_data)
+        base64_data = base64.urlsafe_b64encode(b(json_data))
         signature = signPayload(self.secret, base64_data, urlsafe=True)
         data = decodeSignedData(
             self.merchantkey,
-            Ds_MerchantParameters = base64_data.decode('ascii'),
-            Ds_Signature = signature.decode('ascii'),
-            Ds_SignatureVersion = self.signatureversion.decode('ascii'),
+            Ds_MerchantParameters = base64_data,
+            Ds_Signature = signature,
+            Ds_SignatureVersion = self.signatureversion,
             )
         self.assertEqual(data, dict(
             Ds_Order = '666',
