@@ -98,6 +98,8 @@ _notification_fields = [
     'Ds_Card_Type', #  1 / A-N Opcional: Valores posibles: C – Crédito D - Débito
     'Ds_ErrorCode', # TODO: Undocumented field but actually sent (Documented as SOAP field)
     'Ds_Card_Brand', # 1 / 1=VISA, 2=MASTERCARD, 8=AMEX, 9=JCB, 6=DINERS
+    'Ds_Merchant_Cof_Txnid',
+        # Para pagos recurrentes o aplazados, no lo deberiamos recibir però en ocasiones lo recibimos vacio
     ]
 _notification_fields_upper = dict(
     (key.upper(), key)
