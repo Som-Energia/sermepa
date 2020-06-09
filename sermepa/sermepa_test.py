@@ -80,6 +80,8 @@ class Generator_Test(unittest.TestCase):
 
 class GeneratorFull_Test(Generator_Test):
 
+    urlTest = 'https://sis-t.redsys.es:25443/sis/realizarPago'
+    urlProduction = 'https://sis.redsys.es/sis/realizarPago'
     data = dict(
         Ds_Merchant_MerchantCode = '123456789',
         Ds_Merchant_Order = '1447961844',
@@ -182,7 +184,7 @@ class GeneratorFull_Test(Generator_Test):
             Ds_Merchant_UrlOK = "https://www.somenergia.coop/es/pago-realizado",
             )
         import requests
-        r = requests.post('https://sis-t.redsys.es:25443/sis/realizarPago',
+        r = requests.post(self.urlTest,
             data = encodeSignedData(
                 config.redsystest['merchantkey'],
                 **data
@@ -213,7 +215,7 @@ class GeneratorFull_Test(Generator_Test):
             Ds_Merchant_UrlOK = "https://www.somenergia.coop/es/pago-realizado",
             )
         import requests
-        r = requests.post('https://sis-t.redsys.es:25443/sis/realizarPago',
+        r = requests.post(self.urlTest,
             data = encodeSignedData(
                 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', # bad key
                 **data
@@ -244,7 +246,7 @@ class GeneratorFull_Test(Generator_Test):
             Ds_Merchant_UrlOK = "https://www.somenergia.coop/es/pago-realizado",
             )
         import requests
-        r = requests.post('https://sis-t.redsys.es:25443/sis/realizarPago',
+        r = requests.post(self.urlTest,
             data = encodeSignedData(
                 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA',
                 **data
@@ -278,7 +280,7 @@ class GeneratorFull_Test(Generator_Test):
             Ds_Merchant_UrlOK = "https://www.somenergia.coop/es/pago-realizado",
             )
         import requests
-        r = requests.post('https://sis.redsys.es/sis/realizarPago',
+        r = requests.post(self.urlProduction,
             data = encodeSignedData(
 #                'sq7HjrUOBfKmC576ILgskD5srU870gJ7', # Clave para tests
                 config.redsys['merchantkey'],
