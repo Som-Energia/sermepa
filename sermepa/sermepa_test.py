@@ -80,6 +80,11 @@ class Generator_Test(unittest.TestCase):
 
 class GeneratorFull_Test(Generator_Test):
 
+    # public credentials from https://pagosonline.redsys.es/entornosPruebas.html
+    redsystest = dict(
+        merchantkey = 'sq7HjrUOBfKmC576ILgskD5srU870gJ7',
+        merchantcode = '999008881',
+    )
     urlTest = 'https://sis-t.redsys.es:25443/sis/realizarPago'
     urlProduction = 'https://sis.redsys.es/sis/realizarPago'
     data = dict(
@@ -160,17 +165,13 @@ class GeneratorFull_Test(Generator_Test):
         self.assertTrue(revertedDescription.startswith("M01234"))
         self.assertEqual(len(revertedDescription), 125)
 
-
-    @unittest.skipIf(not config, "Requires a config.py file")
-    @unittest.skipIf(config and 'redsystest' not in config.__dict__,
-        "redsystest dictionary missing in config.py")
     def test_sendingPost_testing(self):
 
         data = dict(
             Ds_Merchant_Amount = "10000",
             Ds_Merchant_ConsumerLanguage = "003",
             Ds_Merchant_Currency = "978",
-            Ds_Merchant_MerchantCode = config.redsystest['merchantcode'],
+            Ds_Merchant_MerchantCode = self.redsystest['merchantcode'],
             Ds_Merchant_MerchantData = "COBRAMENT QUOTA SOCI",
             Ds_Merchant_MerchantName = "SOM ENERGIA, SCCL",
             Ds_Merchant_MerchantURL = "https://testing.somenergia.coop:5001/pagament/notificacio",
@@ -186,7 +187,7 @@ class GeneratorFull_Test(Generator_Test):
         import requests
         r = requests.post(self.urlTest,
             data = encodeSignedData(
-                config.redsystest['merchantkey'],
+                self.redsystest['merchantkey'],
                 **data
                 )
             )
@@ -294,6 +295,12 @@ class GeneratorFull_Test(Generator_Test):
 
 
 class NotificationReceiver_Test(unittest.TestCase):
+
+    # public credentials from https://pagosonline.redsys.es/entornosPruebas.html
+    redsystest = dict(
+        merchantkey = 'sq7HjrUOBfKmC576ILgskD5srU870gJ7',
+        merchantcode = '999008881',
+    )
 
     # back2back data taken from PHP example
 
@@ -473,12 +480,9 @@ class NotificationReceiver_Test(unittest.TestCase):
             Ds_Merchant_Cof_Txnid = ''
             ))
 
-    @unittest.skipIf(not config, "Requires a config.py file")
-    @unittest.skipIf(config and 'redsystest' not in config.__dict__,
-        "redsystest dictionary missing in config.py")
     def test_decodeSignedData_realData(self):
         data = decodeSignedData(
-            config.redsystest['merchantkey'],
+            self.redsystest['merchantkey'],
             Ds_Signature = '1vI3nQjTUKdOR198GtoSulEzMw14QvnchEmWMEgI7gM=',
             Ds_MerchantParameters = 'eyJEc19EYXRlIjoiMTklMkYwMSUyRjIwMTYiLCJEc19Ib3VyIjoiMjIlM0EwNCIsIkRzX1NlY3VyZVBheW1lbnQiOiIxIiwiRHNfQ2FyZF9Db3VudHJ5IjoiNzI0IiwiRHNfQW1vdW50IjoiMTAwMDAiLCJEc19DdXJyZW5jeSI6Ijk3OCIsIkRzX09yZGVyIjoiMjAxNjQ5NDU1YjZmIiwiRHNfTWVyY2hhbnRDb2RlIjoiMTQyMDAzNzQ4IiwiRHNfVGVybWluYWwiOiIwMDEiLCJEc19SZXNwb25zZSI6IjAwMDAiLCJEc19NZXJjaGFudERhdGEiOiJDT0JSQU1FTlQrUVVPVEErU09DSSIsIkRzX1RyYW5zYWN0aW9uVHlwZSI6IjAiLCJEc19Db25zdW1lckxhbmd1YWdlIjoiMyIsIkRzX0F1dGhvcmlzYXRpb25Db2RlIjoiMjAxMzg4In0=',
             Ds_SignatureVersion = 'HMAC_SHA256_V1',
