@@ -477,7 +477,7 @@ class NotificationReceiver_Test(unittest.TestCase):
     def test_decodeSignedData_realData(self):
         data = decodeSignedData(
             config.redsystest['merchantkey'],
-            Ds_Signature = u'k6jn15PV1PyoTOAkiHVIPixOERFT9CeKOERtAJkcsMg=',
+            Ds_Signature = u'1vI3nQjTUKdOR198GtoSulEzMw14QvnchEmWMEgI7gM=',
             Ds_MerchantParameters = u'eyJEc19EYXRlIjoiMTklMkYwMSUyRjIwMTYiLCJEc19Ib3VyIjoiMjIlM0EwNCIsIkRzX1NlY3VyZVBheW1lbnQiOiIxIiwiRHNfQ2FyZF9Db3VudHJ5IjoiNzI0IiwiRHNfQW1vdW50IjoiMTAwMDAiLCJEc19DdXJyZW5jeSI6Ijk3OCIsIkRzX09yZGVyIjoiMjAxNjQ5NDU1YjZmIiwiRHNfTWVyY2hhbnRDb2RlIjoiMTQyMDAzNzQ4IiwiRHNfVGVybWluYWwiOiIwMDEiLCJEc19SZXNwb25zZSI6IjAwMDAiLCJEc19NZXJjaGFudERhdGEiOiJDT0JSQU1FTlQrUVVPVEErU09DSSIsIkRzX1RyYW5zYWN0aW9uVHlwZSI6IjAiLCJEc19Db25zdW1lckxhbmd1YWdlIjoiMyIsIkRzX0F1dGhvcmlzYXRpb25Db2RlIjoiMjAxMzg4In0=',
             Ds_SignatureVersion = u'HMAC_SHA256_V1',
             )
