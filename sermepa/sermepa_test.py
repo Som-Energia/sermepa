@@ -477,25 +477,25 @@ class NotificationReceiver_Test(unittest.TestCase):
     def test_decodeSignedData_realData(self):
         data = decodeSignedData(
             config.redsystest['merchantkey'],
-            Ds_Signature = u'1vI3nQjTUKdOR198GtoSulEzMw14QvnchEmWMEgI7gM=',
-            Ds_MerchantParameters = u'eyJEc19EYXRlIjoiMTklMkYwMSUyRjIwMTYiLCJEc19Ib3VyIjoiMjIlM0EwNCIsIkRzX1NlY3VyZVBheW1lbnQiOiIxIiwiRHNfQ2FyZF9Db3VudHJ5IjoiNzI0IiwiRHNfQW1vdW50IjoiMTAwMDAiLCJEc19DdXJyZW5jeSI6Ijk3OCIsIkRzX09yZGVyIjoiMjAxNjQ5NDU1YjZmIiwiRHNfTWVyY2hhbnRDb2RlIjoiMTQyMDAzNzQ4IiwiRHNfVGVybWluYWwiOiIwMDEiLCJEc19SZXNwb25zZSI6IjAwMDAiLCJEc19NZXJjaGFudERhdGEiOiJDT0JSQU1FTlQrUVVPVEErU09DSSIsIkRzX1RyYW5zYWN0aW9uVHlwZSI6IjAiLCJEc19Db25zdW1lckxhbmd1YWdlIjoiMyIsIkRzX0F1dGhvcmlzYXRpb25Db2RlIjoiMjAxMzg4In0=',
-            Ds_SignatureVersion = u'HMAC_SHA256_V1',
+            Ds_Signature = '1vI3nQjTUKdOR198GtoSulEzMw14QvnchEmWMEgI7gM=',
+            Ds_MerchantParameters = 'eyJEc19EYXRlIjoiMTklMkYwMSUyRjIwMTYiLCJEc19Ib3VyIjoiMjIlM0EwNCIsIkRzX1NlY3VyZVBheW1lbnQiOiIxIiwiRHNfQ2FyZF9Db3VudHJ5IjoiNzI0IiwiRHNfQW1vdW50IjoiMTAwMDAiLCJEc19DdXJyZW5jeSI6Ijk3OCIsIkRzX09yZGVyIjoiMjAxNjQ5NDU1YjZmIiwiRHNfTWVyY2hhbnRDb2RlIjoiMTQyMDAzNzQ4IiwiRHNfVGVybWluYWwiOiIwMDEiLCJEc19SZXNwb25zZSI6IjAwMDAiLCJEc19NZXJjaGFudERhdGEiOiJDT0JSQU1FTlQrUVVPVEErU09DSSIsIkRzX1RyYW5zYWN0aW9uVHlwZSI6IjAiLCJEc19Db25zdW1lckxhbmd1YWdlIjoiMyIsIkRzX0F1dGhvcmlzYXRpb25Db2RlIjoiMjAxMzg4In0=',
+            Ds_SignatureVersion = 'HMAC_SHA256_V1',
             )
         self.assertEqual({
-            'Ds_Amount': u'10000',
-            'Ds_AuthorisationCode': u'201388',
-            'Ds_Card_Country': u'724',
-            'Ds_ConsumerLanguage': u'3',
-            'Ds_Currency': u'978',
-            'Ds_Date': u'19%2F01%2F2016',
-            'Ds_Hour': u'22%3A04',
-            'Ds_MerchantCode': u'142003748',
-            'Ds_MerchantData': u'COBRAMENT+QUOTA+SOCI',
-            'Ds_Order': u'201649455b6f',
-            'Ds_Response': u'0000',
-            'Ds_SecurePayment': u'1',
-            'Ds_Terminal': u'001',
-            'Ds_TransactionType': u'0',
+            'Ds_Amount': '10000',
+            'Ds_AuthorisationCode': '201388',
+            'Ds_Card_Country': '724',
+            'Ds_ConsumerLanguage': '3',
+            'Ds_Currency': '978',
+            'Ds_Date': '19%2F01%2F2016',
+            'Ds_Hour': '22%3A04',
+            'Ds_MerchantCode': '142003748',
+            'Ds_MerchantData': 'COBRAMENT+QUOTA+SOCI',
+            'Ds_Order': '201649455b6f',
+            'Ds_Response': '0000',
+            'Ds_SecurePayment': '1',
+            'Ds_Terminal': '001',
+            'Ds_TransactionType': '0',
             }, data)
 
         self.assertTrue('Ds_Order' in data)
