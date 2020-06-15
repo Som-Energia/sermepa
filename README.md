@@ -42,6 +42,10 @@ redsystest = dict( # Clave para tests
 
 ## Changelog
 
+### sermepa 1.0.1 (2020-06-16)
+
+- Packaging issues to upload onto pipy
+
 ### sermepa 1.0.0
 
 - Suport for Python3
