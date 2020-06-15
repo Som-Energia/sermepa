@@ -6,6 +6,13 @@ A python client library for sending payment orders to the Sermepa/RedSys payment
 
 ## Installation
 
+From pypi.org
+
+```bash
+pip install sermepa
+```
+
+From source:
 ```bash
 pip install .
 ```
@@ -17,7 +24,8 @@ $ ./setup.py test
 ```
 
 If you want to test your own keys create file `config.py`
-with 
+with:
+
 ```python
 # This one should be your private one
 redsys = dict(
@@ -38,7 +46,7 @@ redsystest = dict( # Clave para tests
 
 - Suport for Python3
 - Breaking change: all input and output strings of the library are expected to be unicode, not bytes
-	- To ease transition whenever a parameter is sent as bytes, utf8 decoding is enforced
+    - To ease transition whenever a parameter is sent as bytes, utf8 decoding is enforced
 - Accept `Ds_Merchant_Cof_Txnid` parameter set
 
 ### sermepa 0.1.3
