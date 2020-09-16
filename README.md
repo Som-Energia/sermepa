@@ -43,6 +43,9 @@ redsystest = dict( # Clave para tests
 ```
 
 ## Changelog
+### sermepa 1.0.2 (2020-09-16)
+
+- Accept `Ds_ProcessedPayMethod` parameter set
 
 ### sermepa 1.0.1 (2020-06-16)
 
