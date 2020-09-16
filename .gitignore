@@ -1,0 +1,7 @@
+.eggs/
+build/
+config.py
+dist/
+sermepa.egg-info/
+*.pyc
+__pycache__
