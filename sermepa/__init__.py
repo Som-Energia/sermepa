@@ -100,7 +100,8 @@ _notification_fields = [
     'Ds_Card_Brand', # 1 / 1=VISA, 2=MASTERCARD, 8=AMEX, 9=JCB, 6=DINERS
     'Ds_Merchant_Cof_Txnid',
         # Para pagos recurrentes o aplazados, no lo deberiamos recibir però en ocasiones lo recibimos vacio
-    'Ds_ProcessedPayMethod' # En ocasiones lo recibimos vacio
+    'Ds_ProcessedPayMethod', # En ocasiones lo recibimos vacio
+    'Ds_Amount_Euro',
     ]
 _notification_fields_upper = dict(
     (key.upper(), key)
