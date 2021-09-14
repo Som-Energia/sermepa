@@ -1,6 +1,6 @@
 # Sermepa client
 
-[![Build Status](https://travis-ci.org/Som-Energia/sermepa.svg?branch=master)](https://travis-ci.org/Som-Energia/sermepa)
+[![Build Status](https://app.travis-ci.com/Som-Energia/sermepa.svg?branch=master)](https://app.travis-ci.com/Som-Energia/sermepa)
 [![PyPi Downloads](https://img.shields.io/pypi/dm/sermepa.svg)](https://pypi.python.org/pypi/sermepa)
 [![Coverage Status](https://coveralls.io/repos/github/som-energia/sermepa/badge.svg?branch=master)](https://coveralls.io/github/som-energia/sermepa?branch=master)
 
