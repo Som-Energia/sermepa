@@ -280,10 +280,6 @@ def decodeSignedData(
             camell = _notification_fields_upper[key]
             data[camell]=data[key]
             del data[key]
-            continue
-
-        if key not in _notification_fields:
-            error("Bad parameter '{}'".format(key))
 
     return data
 

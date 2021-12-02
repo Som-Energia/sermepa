@@ -411,19 +411,19 @@ class NotificationReceiver_Test(unittest.TestCase):
         msg = cm.exception.args[0]
         self.assertEqual(msg, 'Bad signature')
 
-    def test_decodeSignedData_badParam(self):
+    def test_decodeSignedData_unexpectedParam(self):
         json_data = '{"Ds_Order":"666", "Bad":"value"}'
         base64_data = base64.urlsafe_b64encode(b(json_data))
         signature = signPayload(self.secret, base64_data, urlsafe=True)
-        with self.assertRaises(SignatureError) as cm:
-            decodeSignedData(
-                self.merchantkey,
-                Ds_MerchantParameters = base64_data,
-                Ds_Signature = signature,
-                Ds_SignatureVersion = self.signatureversion,
-                )
-        msg = cm.exception.args[0]
-        self.assertEqual(msg, "Bad parameter 'Bad'")
+
+        data = decodeSignedData(
+            self.merchantkey,
+            Ds_MerchantParameters=base64_data,
+            Ds_Signature=signature,
+            Ds_SignatureVersion=self.signatureversion,
+        )
+
+        self.assertEqual(data, dict(Ds_Order='666', Bad='value'))
 
     def test_decodeSignedData_upperCaseOrder(self):
         json_data = '{"DS_ORDER":"666"}'
