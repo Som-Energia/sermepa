@@ -44,6 +44,10 @@ redsystest = dict( # Clave para tests
 ```
 
 ## Changelog
+### sermepa 1.0.4-dev
+
+- When sermepa revice an unexpected param in `decodeSignedData` method not will raise `SignatureError`
+
 ### sermepa 1.0.2 (2020-09-16)
 
 - Accept `Ds_ProcessedPayMethod` parameter set
