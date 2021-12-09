@@ -41,8 +41,8 @@ jobs:
           ./setup.py develop
       - uses: BSFishy/pip-action@v1
         with:
-          #http://twhiteman.netfirms.com/pyDES/pyDes-2.0.1.zip
           packages: |
+            pytest
             coveralls
       - name: Unit tests
         run: |
