@@ -22,9 +22,8 @@ except ImportError:
     config = None
 
 def randhex(nbytes):
-    import binascii
     import random
-    return binascii.hexlify(random.randbytes(nbytes))
+    return "{1:0{0}x}".format(nbytes*2,random.getrandbits(nbytes*8))
 
 
 class Generator_Test(unittest.TestCase):
