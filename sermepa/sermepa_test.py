@@ -21,6 +21,11 @@ try:
 except ImportError:
     config = None
 
+def randhex(nbytes):
+    import binascii
+    import random
+    return binascii.hexlify(random.randbytes(nbytes))
+
 
 class Generator_Test(unittest.TestCase):
 
@@ -237,7 +242,7 @@ class GeneratorFull_Test(Generator_Test):
             Ds_Merchant_MerchantData = "COBRAMENT QUOTA SOCI",
             Ds_Merchant_MerchantName = "SOM ENERGIA, SCCL",
             Ds_Merchant_MerchantURL = "https://testing.somenergia.coop:5001/pagament/notificacio",
-            Ds_Merchant_Order = "20167db2f375",
+            Ds_Merchant_Order = randhex(nbytes=6), # "20167db2f375",
             Ds_Merchant_ProductDescription = "Alta de soci SOMENERGIA",
             Ds_Merchant_SumTotal = "10000",
             Ds_Merchant_Terminal = "1",
