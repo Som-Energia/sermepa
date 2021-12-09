@@ -43,10 +43,11 @@ jobs:
         with:
           packages: |
             pytest
+            pytest-cov
             coveralls
       - name: Unit tests
         run: |
-          coverage run --source sermepa pytest sermepa
+          pytest --cov=sermepa
       - name: Coveralls
         uses: AndreMiras/coveralls-python-action@develop
         with:
