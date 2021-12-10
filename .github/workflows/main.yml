@@ -52,7 +52,7 @@ jobs:
         uses: AndreMiras/coveralls-python-action@develop
         with:
           parallel: true
-          flag-name: Unit tests
+          flag-name: python-${{ matrix.python-version }}
 
   coveralls_finish:
     needs: build
