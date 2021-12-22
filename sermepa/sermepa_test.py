@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import unittest
+import random
 
 import base64
 import json
@@ -20,11 +21,6 @@ try:
     import config
 except ImportError:
     config = None
-
-def randhex(nbytes):
-    import random
-    return "{1:0{0}x}".format(nbytes*2,random.getrandbits(nbytes*8))
-
 
 class Generator_Test(unittest.TestCase):
 
@@ -57,6 +53,9 @@ class Generator_Test(unittest.TestCase):
     signature = 'Ejse86yr96Xbr1mf6UvQLoTPwwTyFiLXM+2uT09i9nY='
     signatureversion = 'HMAC_SHA256_V1'
 
+    def new_order_id(self):
+        nbytes=6
+        return "{1:0{0}x}".format(nbytes*2,random.getrandbits(nbytes*8))
 
     def test_encodePayload(self):
         self.assertEqual(
@@ -179,7 +178,7 @@ class GeneratorFull_Test(Generator_Test):
             Ds_Merchant_MerchantData = "COBRAMENT QUOTA SOCI",
             Ds_Merchant_MerchantName = "SOM ENERGIA, SCCL",
             Ds_Merchant_MerchantURL = "https://testing.somenergia.coop:5001/pagament/notificacio",
-            Ds_Merchant_Order = randhex(nbytes=6), # "20167db2f375",
+            Ds_Merchant_Order = self.new_order_id(),
             Ds_Merchant_ProductDescription = "Alta de soci SOMENERGIA",
             Ds_Merchant_SumTotal = "10000",
             Ds_Merchant_Terminal = "1",
@@ -210,7 +209,7 @@ class GeneratorFull_Test(Generator_Test):
             Ds_Merchant_MerchantData = "COBRAMENT QUOTA SOCI",
             Ds_Merchant_MerchantName = "SOM ENERGIA, SCCL",
             Ds_Merchant_MerchantURL = "https://testing.somenergia.coop:5001/pagament/notificacio",
-            Ds_Merchant_Order = randhex(nbytes=6), # "20167db2f375",
+            Ds_Merchant_Order = self.new_order_id(),
             Ds_Merchant_ProductDescription = "Alta de soci SOMENERGIA",
             Ds_Merchant_SumTotal = "10000",
             Ds_Merchant_Terminal = "1",
@@ -241,7 +240,7 @@ class GeneratorFull_Test(Generator_Test):
             Ds_Merchant_MerchantData = "COBRAMENT QUOTA SOCI",
             Ds_Merchant_MerchantName = "SOM ENERGIA, SCCL",
             Ds_Merchant_MerchantURL = "https://testing.somenergia.coop:5001/pagament/notificacio",
-            Ds_Merchant_Order = randhex(nbytes=6), # "20167db2f375",
+            Ds_Merchant_Order = self.new_order_id(),
             Ds_Merchant_ProductDescription = "Alta de soci SOMENERGIA",
             Ds_Merchant_SumTotal = "10000",
             Ds_Merchant_Terminal = "1",
@@ -412,19 +411,19 @@ class NotificationReceiver_Test(unittest.TestCase):
         msg = cm.exception.args[0]
         self.assertEqual(msg, 'Bad signature')
 
-    def test_decodeSignedData_badParam(self):
+    def test_decodeSignedData_unexpectedParam(self):
         json_data = '{"Ds_Order":"666", "Bad":"value"}'
         base64_data = base64.urlsafe_b64encode(b(json_data))
         signature = signPayload(self.secret, base64_data, urlsafe=True)
-        with self.assertRaises(SignatureError) as cm:
-            decodeSignedData(
-                self.merchantkey,
-                Ds_MerchantParameters = base64_data,
-                Ds_Signature = signature,
-                Ds_SignatureVersion = self.signatureversion,
-                )
-        msg = cm.exception.args[0]
-        self.assertEqual(msg, "Bad parameter 'Bad'")
+
+        data = decodeSignedData(
+            self.merchantkey,
+            Ds_MerchantParameters=base64_data,
+            Ds_Signature=signature,
+            Ds_SignatureVersion=self.signatureversion,
+        )
+
+        self.assertEqual(data, dict(Ds_Order='666', Bad='value'))
 
     def test_decodeSignedData_upperCaseOrder(self):
         json_data = '{"DS_ORDER":"666"}'
