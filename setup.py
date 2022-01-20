@@ -12,7 +12,7 @@ with open("README.md") as readme:
 
 setup(
     name='sermepa',
-    version='1.0.4-dev',
+    version='1.0.4',
     description = __doc__.strip(),
     author='GISCE Enginyeria',
     author_email='devel@gisce.net',
