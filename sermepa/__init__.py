@@ -64,6 +64,9 @@ _request_fields = [
         # Representa el código de autorización necesario para identificar una transacción recurrente sucesiva en las devoluciones de operaciones recurrentes sucesivas. Obligatorio en devoluciones de operaciones recurrentes.
     ('O','D',  10, 'Ds_Merchant_TransactionDate'),
         # Representa la fecha de la cuota sucesiva, necesaria para identificar la transacción en las devoluciones.  Obligatorio en las devoluciones de cuotas sucesivas y de cuotas sucesivas diferidas.
+    ('O','A',   4, 'Ds_Merchant_PayMethods'),
+        # Payment method, z for bizum, C for credit card, P for PayPal, R for transference, xpay for GooglePay and ApplePay
+
 ]
 
 params = dict([
@@ -343,6 +346,7 @@ class Client(object):
             'Ds_Merchant_TransactionType': self.Ds_Merchant_TransactionType \
                 or '0',
             'Ds_Merchant_MerchantData': self.Ds_Merchant_MerchantData[:1024],
+            'Ds_Merchant_PayMethods': self.Ds_Merchant_PayMethods[:4] or 'C',
 #            'Ds_Merchant_DateFrecuency': self.Ds_Merchant_DateFrecuency,
 #            'Ds_Merchant_ChargeExpiryDate':
 #                (self.Ds_Merchant_ChargeExpiryDate and
