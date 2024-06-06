@@ -28,6 +28,7 @@ setup(
         ],
     test_require=[
         'requests',
+        'pytest-coverage',
         ],
     packages=find_packages(),
     classifiers = [
