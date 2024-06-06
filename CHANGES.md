@@ -1,5 +1,9 @@
 # Changelog
 
+## sermepa 1.1.2 (2024-06-06)
+
+- Fix: misspell on payment method initialization
+
 ## sermepa 1.1.1 (2024-06-06)
 
 - Fix: crashed if no Payment method specified
