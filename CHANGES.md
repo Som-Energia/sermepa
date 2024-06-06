@@ -1,5 +1,9 @@
 # Changelog
 
+## sermepa 1.1.1 (2024-06-06)
+
+- Fix: crashed if no Payment method specified
+
 ## sermepa 1.1.0 (2024-06-06)
 
 - Support `Ds_Merchant_PayMethod` to use Bizum, PayPal...
