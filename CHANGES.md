@@ -1,5 +1,9 @@
 # Changelog
 
+## sermepa 1.1.0 (2024-06-06)
+
+- Support `Ds_Merchant_PayMethod` to use Bizum, PayPal...
+
 ## sermepa 1.0.4 (2021-12-22)
 
 - When sermepa revice an unexpected param in `decodeSignedData` method not will raise `SignatureError`
