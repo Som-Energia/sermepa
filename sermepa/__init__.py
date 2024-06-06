@@ -319,7 +319,7 @@ class Client(object):
         self.endpoint = endpoint_url
         self.priv_key = priv_key
         self.Ds_Merchant_MerchantCode = business_code
-        self.Ds_ProcessedPayMethod = "C"
+        self.Ds_Merchant_PayMethods = "C"
 
     def get_pay_form_data(self, transaction_params):
         """Pay call"""
