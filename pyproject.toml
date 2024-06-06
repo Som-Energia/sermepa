@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "sermepa"
+version = '1.1.2'
+description = "A client to submit payment orders to the Sermepa service."
+authors = [
+    { name="Som Energia", email="itcrowd@somenergia.coop" },
+    { name="Gisce SL", email="devel@gisce.net"},
+]
+readme = "README.md"
+requires-python = ">=2.7"
+license = { text="GNU General Public License v3 or later (GPLv3+)"}
+
+classifiers = [
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 2',
+    'Programming Language :: Python :: 3',
+    'Topic :: Software Development :: Libraries :: Python Modules',
+    'Intended Audience :: Developers',
+    'Development Status :: 5 - Production/Stable',
+    'License :: OSI Approved :: GNU General Public License v2 or later (GPLv2+)',
+    'Topic :: Office/Business :: Financial',
+    'Operating System :: OS Independent',
+]
+
+dependencies = [
+    'pyDes',
+    'simplejson',
+    # Test
+    'requests',
+    'pytest-coverage',
+]
+
+[project.urls]
+Homepage = "https://somenergia.coop"
+Documentation = "https://github.com/som-energia/sermepa"
+Repository = "https://github.com/som-energia/sermepa"
+Changelog = "https://github.com/som-energia/sermepa/blob/master/CHANGELOG.md"
+
+
+[tool.setuptools.packages.find]
+exclude = ["sermepa.config*"]
+
+[tool.coverage.run]
+relative_files = true
+branch = true
+omit = [
+    "**/*_test.py",
+    "**/test_*.py",
+]
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --tb=native --color=yes --cov=sermepa"
+testpaths = "sermepa"
+
+
