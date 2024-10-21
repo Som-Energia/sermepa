@@ -1,5 +1,9 @@
 # Changelog
 
+## sermepa 1.1.3 (2024-10-21)
+
+- Migrated to pyproject
+
 ## sermepa 1.1.2 (2024-06-06)
 
 - Fix: misspell on payment method initialization
