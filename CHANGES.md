@@ -1,5 +1,9 @@
 # Changelog
 
+## sermepa 1.2.0 (2026-05-27)
+
+- Add REST for MIT operations
+
 ## sermepa 1.1.3 (2024-10-21)
 
 - Migrated to pyproject
