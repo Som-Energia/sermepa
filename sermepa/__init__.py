@@ -13,6 +13,7 @@ import base64
 import hmac
 import json
 import pyDes
+import requests
 
 # Python 3 compatibility
 try:
@@ -66,6 +67,16 @@ _request_fields = [
         # Representa la fecha de la cuota sucesiva, necesaria para identificar la transacción en las devoluciones.  Obligatorio en las devoluciones de cuotas sucesivas y de cuotas sucesivas diferidas.
     ('O','A',   4, 'Ds_Merchant_PayMethods'),
         # Payment method, z for bizum, C for credit card, P for PayPal, R for transference, xpay for GooglePay and ApplePay
+    ('O','A',  40, 'Ds_Merchant_Identifier'),
+        # Token/identifier for COF/MIT operations.
+    ('O','A',   1, 'Ds_Merchant_Cof_INI'),
+        # S for initial COF operation, N for subsequent operation.
+    ('O','A',   1, 'Ds_Merchant_Cof_Type'),
+        # COF type, C for MIT/Otras in common setups.
+    ('O','A',  10, 'Ds_Merchant_Excep_SCA'),
+        # SCA exception hint (e.g. MIT).
+    ('O','A',   5, 'Ds_Merchant_DirectPayment'),
+        # Direct payment hint for token-based operations.
 
 ]
 
@@ -355,6 +366,39 @@ class Client(object):
 #            'Ds_Merchant_AuthorisationCode': self.Ds_Merchant_AuthorisationCode,
 #            'Ds_Merchant_TransactionDate': self.Ds_Merchant_TransactionDate,
             })
+
+
+class RestClient(Client):
+    """REST Client for Redsys operations."""
+
+    def __init__(self, business_code, priv_key,
+                 endpoint_url='https://sis.redsys.es/sis/rest/trataPeticionREST',
+                 timeout=30):
+        super(RestClient, self).__init__(business_code, priv_key, endpoint_url)
+        self.timeout = timeout
+
+    def _decode_response_parameters(self, response_data):
+        encoded = response_data.get('Ds_MerchantParameters')
+        if not encoded:
+            return None
+        decoded = base64.urlsafe_b64decode(b(encoded))
+        return json.loads(decoded)
+
+    def mit_payment(self, transaction_params):
+        signed_data = encodeSignedData(self.priv_key, **transaction_params)
+
+        response = requests.post(
+            self.endpoint,
+            json=signed_data,
+            timeout=self.timeout,
+        )
+        response.raise_for_status()
+
+        response_data = response.json()
+        return dict(
+            raw=response_data,
+            merchant_parameters=self._decode_response_parameters(response_data),
+        )
 
 
 class TestClient(Client):

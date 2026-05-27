@@ -14,8 +14,18 @@ from sermepa import (
     decodeSignedData,
     encodeSignedData,
     SignatureError,
+    RestClient,
     u, b,
 )
+
+try:
+    from unittest.mock import patch, Mock
+except ImportError:
+    try:
+        from mock import patch, Mock
+    except ImportError:
+        patch = None
+        Mock = None
 
 try:
     import config
@@ -542,6 +552,77 @@ class NotificationReceiver_Test(unittest.TestCase):
             "Ds_ErrorCode":"SIS0093",
             "Ds_AuthorisationCode":"++++++",
             }
+
+
+class RestClient_Test(unittest.TestCase):
+
+    merchantkey = 'sq7HjrUOBfKmC576ILgskD5srU870gJ7'
+
+    def test_encodeSignedData_accepts_mit_fields(self):
+        result = encodeSignedData(
+            self.merchantkey,
+            Ds_Merchant_Amount='145',
+            Ds_Merchant_Order='1447961844',
+            Ds_Merchant_MerchantCode='999008881',
+            Ds_Merchant_Currency='978',
+            Ds_Merchant_TransactionType='O',
+            Ds_Merchant_Terminal='1',
+            Ds_Merchant_MerchantURL='https://merchant.local/notify',
+            Ds_Merchant_SumTotal='145',
+            Ds_Merchant_UrlOK='https://merchant.local/ok',
+            Ds_Merchant_UrlKO='https://merchant.local/ko',
+            Ds_Merchant_Identifier='TOKEN123',
+            Ds_Merchant_Cof_INI='N',
+            Ds_Merchant_Cof_Type='C',
+            Ds_Merchant_Excep_SCA='MIT',
+            Ds_Merchant_DirectPayment='true',
+        )
+
+        self.assertIn('Ds_MerchantParameters', result)
+        payload = json.loads(base64.b64decode(result['Ds_MerchantParameters']))
+        self.assertEqual(payload['Ds_Merchant_Identifier'], 'TOKEN123')
+        self.assertEqual(payload['Ds_Merchant_Cof_Type'], 'C')
+
+    @unittest.skipIf(patch is None, 'mock package not available')
+    @patch('sermepa.requests.post')
+    def test_mit_payment_calls_rest_endpoint(self, post_mock):
+        client = RestClient('999008881', self.merchantkey)
+        response_payload = {'Ds_Response': '0000'}
+        encoded = base64.urlsafe_b64encode(b(json.dumps(response_payload)))
+
+        response = Mock()
+        response.json.return_value = {
+            'Ds_SignatureVersion': 'HMAC_SHA256_V1',
+            'Ds_Signature': 'signature',
+            'Ds_MerchantParameters': u(encoded),
+        }
+        response.raise_for_status.return_value = None
+        post_mock.return_value = response
+
+        tx = dict(
+            Ds_Merchant_Amount='145',
+            Ds_Merchant_Order='1447961844',
+            Ds_Merchant_MerchantCode='999008881',
+            Ds_Merchant_Currency='978',
+            Ds_Merchant_TransactionType='O',
+            Ds_Merchant_Terminal='1',
+            Ds_Merchant_MerchantURL='https://merchant.local/notify',
+            Ds_Merchant_SumTotal='145',
+            Ds_Merchant_UrlOK='https://merchant.local/ok',
+            Ds_Merchant_UrlKO='https://merchant.local/ko',
+            Ds_Merchant_Identifier='TOKEN123',
+            Ds_Merchant_Cof_INI='N',
+            Ds_Merchant_Cof_Type='C',
+            Ds_Merchant_Excep_SCA='MIT',
+            Ds_Merchant_DirectPayment='true',
+        )
+        result = client.mit_payment(tx)
+
+        post_mock.assert_called_once()
+        call_kwargs = post_mock.call_args[1]
+        self.assertEqual(call_kwargs['timeout'], 30)
+        self.assertIn('Ds_MerchantParameters', call_kwargs['json'])
+        self.assertEqual(result['merchant_parameters']['Ds_Response'], '0000')
 
 
 
