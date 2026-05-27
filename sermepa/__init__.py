@@ -381,11 +381,8 @@ class RestClient(Client):
         encoded = response_data.get('Ds_MerchantParameters')
         if not encoded:
             return None
-        try:
-            decoded = base64.urlsafe_b64decode(b(encoded))
-            return json.loads(decoded)
-        except Exception:
-            return None
+        decoded = base64.urlsafe_b64decode(b(encoded))
+        return json.loads(decoded)
 
     def mit_payment(self, transaction_params):
         signed_data = encodeSignedData(self.priv_key, **transaction_params)
