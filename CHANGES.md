@@ -1,5 +1,9 @@
 # Changelog
 
+## sermepa 1.2.2 (2026-08-31)
+
+- Fix COF transaction ID request parameter
+
 ## sermepa 1.2.1 (2026-08-31)
 
 - Add setup.py
@@ -66,4 +70,3 @@
 - Recover pypi project
 - Review error handling
 - Production api test should depend on the concrete key
-

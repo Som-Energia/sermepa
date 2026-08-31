@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 
 [project]
 name = "sermepa"
-version = '1.2.1'
+version = '1.2.2'
 description = "A client to submit payment orders to the Sermepa service."
 authors = [
     { name="Som Energia", email="itcrowd@somenergia.coop" },
@@ -54,5 +54,4 @@ omit = [
 [tool.pytest.ini_options]
 addopts = "--doctest-modules --tb=native --color=yes --cov=sermepa"
 testpaths = "sermepa"
-
 
