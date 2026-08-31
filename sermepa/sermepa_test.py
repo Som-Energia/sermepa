@@ -574,6 +574,7 @@ class RestClient_Test(unittest.TestCase):
             Ds_Merchant_Identifier='TOKEN123',
             Ds_Merchant_Cof_INI='N',
             Ds_Merchant_Cof_Type='C',
+            Ds_Merchant_Cof_TxnID='2006031152000',
             Ds_Merchant_Excep_SCA='MIT',
             Ds_Merchant_DirectPayment='true',
         )
@@ -582,6 +583,22 @@ class RestClient_Test(unittest.TestCase):
         payload = json.loads(base64.b64decode(result['Ds_MerchantParameters']))
         self.assertEqual(payload['Ds_Merchant_Identifier'], 'TOKEN123')
         self.assertEqual(payload['Ds_Merchant_Cof_Type'], 'C')
+        self.assertEqual(payload['Ds_Merchant_Cof_TxnID'], '2006031152000')
+        self.assertEqual(
+            result['Ds_Signature'],
+            signPayload(
+                orderSecret(self.merchantkey, '1447961844'),
+                result['Ds_MerchantParameters'],
+            ),
+        )
+
+    def test_encodeSignedData_rejects_unknown_parameter(self):
+        with self.assertRaises(ValueError):
+            encodeSignedData(
+                self.merchantkey,
+                Ds_Merchant_Order='1447961844',
+                Ds_Merchant_Unknown='value',
+            )
 
     @unittest.skipIf(patch is None, 'mock package not available')
     @patch('sermepa.requests.post')
