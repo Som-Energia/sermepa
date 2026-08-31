@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='sermepa',
-    version='1.2.0',
+    version='1.2.1',
     description='A client to submit payment orders to the Sermepa service.',
     author='Som Energia, Gisce SL',
     author_email='itcrowd@somenergia.coop, devel@gisce.net',
