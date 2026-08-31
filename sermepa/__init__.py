@@ -73,6 +73,8 @@ _request_fields = [
         # S for initial COF operation, N for subsequent operation.
     ('O','A',   1, 'Ds_Merchant_Cof_Type'),
         # COF type, C for MIT/Otras in common setups.
+    ('O','A',  13, 'Ds_Merchant_Cof_TxnID'),
+        # COF transaction identifier returned by Redsys.
     ('O','A',  10, 'Ds_Merchant_Excep_SCA'),
         # SCA exception hint (e.g. MIT).
     ('O','A',   5, 'Ds_Merchant_DirectPayment'),
