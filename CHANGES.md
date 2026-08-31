@@ -1,5 +1,9 @@
 # Changelog
 
+## sermepa 1.2.1 (2026-08-31)
+
+- Add setup.py
+
 ## sermepa 1.2.0 (2026-05-27)
 
 - Add REST for MIT operations
